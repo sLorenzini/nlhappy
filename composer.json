@@ -2,5 +2,8 @@
     "require": {
         "silex/silex": "~1.1",
         "illuminate/database": "*"
+    },
+    "autoload": {
+    	"psr-4": {"PS\\": "src/PS/"}
     }
 }
