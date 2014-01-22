@@ -4,14 +4,17 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 $dbOptions = require_once __DIR__.'/../config/db.php';
 
-$app = new Silex\Application();
+/* Setup ORM */
+use Illuminate\Database\Capsule\Manager as Capsule;
+$capsule = new Capsule;
+$capsule->addConnection($dbOptions);
+$capsule->bootEloquent();
 
+/* Setup Silex */
+$app = new Silex\Application();
 $app['debug'] = true;
 
-$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
-    'db.options' => $dbOptions
-));
-
+/* Define Routes */
 $app->post('/newsletters/new', function(){
     
 });
@@ -24,4 +27,5 @@ $app->get('/hi/{name}', function($name){
     return "Hi, $name!";
 });
 
+/* Rock On! */
 $app->run();
