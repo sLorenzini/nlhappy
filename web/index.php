@@ -21,12 +21,28 @@ class App extends \Silex\Application
 			return $this->json(array('success' => false, 'error_message' => $e->getMessage()));
 		}
 	}
+
+	public function update($model, $data)
+	{
+		if ($model)
+		{
+			$model->fill($data);
+			return $this->ifSaved($model);
+		}
+		else
+		{
+			return $this->json(array('success' => false, 'error_message' => 'Could not find model to update.'));
+		}
+	}
 }
 
 $dbOptions = require_once __DIR__.'/../config/db.php';
 
+use Symfony\Component\HttpFoundation\Request;
+
 /* Setup ORM */
 use Illuminate\Database\Capsule\Manager as Capsule;
+
 $capsule = new Capsule;
 $capsule->addConnection($dbOptions);
 $capsule->bootEloquent();
@@ -35,14 +51,28 @@ $capsule->bootEloquent();
 $app = new App();
 $app['debug'] = true;
 
+$app->before(function (Request $request) {
+	$data = json_decode($request->getContent(), true);
+    $request->request->replace(is_array($data) ? $data : array());
+});
+
 /* Define Routes */
+
+// Languages
+
+// List languages
 $app->get('/languages', function() use ($app) {
 	return $app->models(PS\Model\Language::all());
 });
 
-$app->post('/languages/new', function() use ($app) {
-	$language = new PS\Model\Language;
-	return $app->ifSaved($language);
+// Create language
+$app->post('/languages', function(Request $request) use ($app) {
+	return $app->ifSaved(new PS\Model\Language($request->request->all()));
+});
+
+// Update language
+$app->post('/languages/{language_id}', function(Request $request, $language_id) use ($app) {
+	return $app->update(PS\Model\Language::find($language_id), $request->request->all());
 });
 
 /* Rock On! */
