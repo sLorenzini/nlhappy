@@ -79,6 +79,7 @@ $app->post('/newsletters/{newsletter_id}/delete', function(Request $request, $ne
 
 // NewsletterLanguages
 
+// Create or Update NewsletterLanguage
 $app->post('/newsletters/{newsletter_id}/{language_code}', function(Request $request, $newsletter_id, $language_code) use ($app) {
 	$newsletter = PS\Model\Newsletter::find($newsletter_id);
 	if ($newsletter)
@@ -109,6 +110,69 @@ $app->post('/newsletters/{newsletter_id}/{language_code}', function(Request $req
 	{
 		return $app->oops('Could not find newsletter.');
 	}
+});
+
+// Get NewsletterLanguage
+$app->get('/newsletters/{newsletter_id}/{language_code}', function($newsletter_id, $language_code) use ($app) {
+	return $app->models($app->getNewsletterLanguage($newsletter_id, $language_code));
+});
+
+// Delete NewsletterLanguage
+$app->post('/newsletters/{newsletter_id}/{language_code}/delete', function($newsletter_id, $language_code) use ($app) {
+	return $app->ifDeleted($app->getNewsletterLanguage($newsletter_id, $language_code));
+});
+
+// Articles
+
+// Create Article
+$app->post('/newsletters/{newsletter_id}/{language_code}/articles', function(Request $request, $newsletter_id, $language_code) use ($app) {
+	$newsletterLanguage = $app->getNewsletterLanguage($newsletter_id, $language_code);
+	if ($newsletterLanguage)
+	{
+		$article = new PS\Model\NewsletterArticle($request->request->all());
+		$article->newsletterLanguage()->associate($newsletterLanguage);
+		return $app->ifSaved($article);
+	}
+	else
+	{
+		return $app->oops('Could not find newsletter language.');
+	}
+});
+
+//Get Article
+$app->get('/articles/{article_id}', function ($article_id) use ($app) {
+	return $app->models(PS\Model\NewsletterArticle::find($article_id));
+});
+
+// Update Article
+$app->post('/articles/{article_id}', function(Request $request, $article_id) use ($app) {
+	if ($article = PS\Model\NewsletterArticle::find($article_id))
+	{
+		$article->fill($request->request->all());
+		return $app->ifSaved($article);
+	}
+	else
+	{
+		return $app->oops('Could not find article.');
+	}
+});
+
+// List Articles
+$app->get('/newsletters/{newsletter_id}/{language_code}/articles', function($newsletter_id, $language_code) use ($app) {
+	$newsletterLanguage = $app->getNewsletterLanguage($newsletter_id, $language_code);
+	if ($newsletterLanguage)
+	{
+		return $app->models($newsletterLanguage->articles);
+	}
+	else
+	{
+		return $app->oops('Could not find newsletter language.');
+	}
+});
+
+// Delete Article
+$app->post('/articles/{article_id}/delete', function(Request $request, $article_id) use ($app) {
+	return $app->ifDeleted(PS\Model\NewsletterArticle::find($article_id));
 });
 
 /* Rock On! */

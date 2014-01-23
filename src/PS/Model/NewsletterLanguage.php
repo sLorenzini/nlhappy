@@ -17,4 +17,9 @@ class NewsletterLanguage extends \Illuminate\Database\Eloquent\Model
 	{
 		return $this->belongsTo('PS\Model\Language');
 	}
+
+	public function articles()
+	{
+		return $this->hasMany('PS\Model\NewsletterArticle');
+	}
 };

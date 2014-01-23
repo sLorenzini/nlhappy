@@ -62,4 +62,11 @@ class App extends \Silex\Application
 			return $this->oops('Could not find model to update.');
 		}
 	}
+
+	public function getNewsletterLanguage($newsletter_id, $language_code)
+	{
+		return \PS\Model\NewsletterLanguage::whereHas('language', function($q) use ($newsletter_id, $language_code) {
+			$q->where('code', $language_code);
+		})->where('newsletter_id', $newsletter_id)->first();
+	}
 }
