@@ -4,38 +4,6 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-class App extends \Silex\Application
-{
-	public function models($data)
-	{
-		return $this->json(array('success' => true, 'data' => $data->toArray()));
-	}
-
-	public function ifSaved($model)
-	{
-		try {
-			$model->save();
-			return $this->models($model);
-		}
-		catch (\Illuminate\Database\QueryException $e) {
-			return $this->json(array('success' => false, 'error_message' => $e->getMessage()));
-		}
-	}
-
-	public function update($model, $data)
-	{
-		if ($model)
-		{
-			$model->fill($data);
-			return $this->ifSaved($model);
-		}
-		else
-		{
-			return $this->json(array('success' => false, 'error_message' => 'Could not find model to update.'));
-		}
-	}
-}
-
 $dbOptions = require_once __DIR__.'/../config/db.php';
 
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +16,7 @@ $capsule->addConnection($dbOptions);
 $capsule->bootEloquent();
 
 /* Setup Silex */
-$app = new App();
+$app = new PS\App();
 $app['debug'] = true;
 
 $app->before(function (Request $request) {
@@ -73,6 +41,74 @@ $app->post('/languages', function(Request $request) use ($app) {
 // Update language
 $app->post('/languages/{language_id}', function(Request $request, $language_id) use ($app) {
 	return $app->update(PS\Model\Language::find($language_id), $request->request->all());
+});
+
+// Delete language
+$app->post('/languages/{language_id}/delete', function(Request $request, $language_id) use ($app) {
+	return $app->ifDeleted(PS\Model\Language::find($language_id));
+});
+
+
+// Newsletters
+
+// List newsletters
+$app->get('/newsletters', function() use ($app) {
+	return $app->models(PS\Model\Newsletter::all());
+});
+
+// Get newsletters
+$app->get('/newsletters/{newsletter_id}', function($newsletter_id) use ($app) {
+	return $app->models(PS\Model\Newsletter::with('languages')->find($newsletter_id));
+});
+
+// Create newsletter
+$app->post('/newsletters', function(Request $request) use ($app) {
+	return $app->ifSaved(new PS\Model\Newsletter($request->request->all()));
+});
+
+// Update newsletter
+$app->post('/newsletters/{newsletter_id}', function(Request $request, $newsletter_id) use ($app) {
+	return $app->update(PS\Model\Newsletter::find($newsletter_id), $request->request->all());
+});
+
+// Delete newsletter
+$app->post('/newsletters/{newsletter_id}/delete', function(Request $request, $newsletter_id) use ($app) {
+	return $app->ifDeleted(PS\Model\Newsletter::find($newsletter_id));
+});
+
+
+// NewsletterLanguages
+
+$app->post('/newsletters/{newsletter_id}/{language_code}', function(Request $request, $newsletter_id, $language_code) use ($app) {
+	$newsletter = PS\Model\Newsletter::find($newsletter_id);
+	if ($newsletter)
+	{
+		$language = PS\Model\Language::where('code', $language_code)->first();
+		if ($language)
+		{
+			$newsletter_language = PS\Model\NewsletterLanguage::where('newsletter_id', $newsletter_id)->where('language_id', $language->id)->first();
+			if ($newsletter_language)
+			{
+				$newsletter_language->fill($request->request->all());
+				return $app->ifSaved($newsletter_language);
+			}
+			else
+			{
+				$newsletter_language = new PS\Model\NewsletterLanguage($request->request->all());
+				$newsletter_language->newsletter()->associate($newsletter);
+				$newsletter_language->language()->associate($language);
+				return $app->ifSaved($newsletter_language);
+			}
+		}
+		else
+		{
+			return $app->oops('Language does not exist.');
+		}
+	}
+	else
+	{
+		return $app->oops('Could not find newsletter.');
+	}
 });
 
 /* Rock On! */
