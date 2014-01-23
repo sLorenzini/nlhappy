@@ -175,5 +175,39 @@ $app->post('/articles/{article_id}/delete', function(Request $request, $article_
 	return $app->ifDeleted(PS\Model\NewsletterArticle::find($article_id));
 });
 
+// Buttons
+
+// Create Article Button
+$app->post('/articles/{article_id}/buttons', function(Request $request, $article_id) use ($app) {
+	if ($article = PS\Model\NewsletterArticle::find($article_id))
+	{
+		$button = new PS\Model\ArticleButton($request->request->all());
+		$button->article()->associate($article);
+		return $app->ifSaved($button);
+	}
+	else
+	{
+		return $app->oops('Could not find article.');
+	}
+});
+
+// Update Article Button
+$app->post('/buttons/{button_id}', function(Request $request, $button_id) use ($app) {
+	if ($button = PS\Model\ArticleButton::find($button_id))
+	{
+		$button->fill($request->request->all());
+		return $app->ifSaved($button);
+	}
+	else
+	{
+		return $app->oops('Could not find button.');
+	}
+});
+
+// Delete Article Button
+$app->post('/buttons/{button_id}/delete', function(Request $request, $button_id) use ($app) {
+	return $app->ifDeleted(PS\Model\ArticleButton::find($button_id));
+});
+
 /* Rock On! */
 $app->run();

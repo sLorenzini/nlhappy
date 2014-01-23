@@ -21,4 +21,9 @@ class NewsletterArticle extends \Illuminate\Database\Eloquent\Model
 	{
 		return $this->belongsTo('PS\Model\NewsletterLanguage');
 	}
+
+	public function buttons()
+	{
+		return $this->hasMany('PS\Model\ArticleButton');
+	}
 };
