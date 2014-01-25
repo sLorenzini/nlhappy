@@ -47,12 +47,12 @@ CREATE  TABLE IF NOT EXISTS `NewsletterLanguage` (
   CONSTRAINT `fk_NewsletterLanguage_1`
     FOREIGN KEY (`language_id` )
     REFERENCES `Language` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_NewsletterLanguage_2`
     FOREIGN KEY (`newsletter_id` )
     REFERENCES `Newsletter` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -79,7 +79,7 @@ CREATE  TABLE IF NOT EXISTS `NewsletterArticle` (
   CONSTRAINT `fk_NewsletterArticle_1`
     FOREIGN KEY (`newsletter_language_id` )
     REFERENCES `NewsletterLanguage` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -102,6 +102,6 @@ CREATE  TABLE IF NOT EXISTS `ArticleButton` (
   CONSTRAINT `fk_ArticleButton_1`
     FOREIGN KEY (`newsletter_article_id` )
     REFERENCES `NewsletterArticle` (`id` )
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
