@@ -7,6 +7,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 $dbOptions = require_once __DIR__.'/../config/db.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /* Setup ORM */
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -22,6 +23,13 @@ $app['debug'] = true;
 $app->before(function (Request $request) {
 	$data = json_decode($request->getContent(), true);
     $request->request->replace(is_array($data) ? $data : array());
+});
+
+$app->after(function (Request $request, Response $response) {
+	if ($jsonp_callback = $request->get('jsonp_callback'))
+	{
+		$response->setCallback($jsonp_callback);
+	}
 });
 
 /* Define Routes */
