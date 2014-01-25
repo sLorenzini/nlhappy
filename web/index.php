@@ -30,6 +30,11 @@ $app->after(function (Request $request, Response $response) {
 	{
 		$response->setCallback($jsonp_callback);
 	}
+	else
+	{
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+	}
+
 });
 
 /* Define Routes */
