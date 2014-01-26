@@ -1,5 +1,18 @@
 <?php
 
+
+function flog($message)
+{
+	static $path = '/tmp/flog.log';
+	$h = fopen($path, 'a');
+	if ($h)
+	{
+		fwrite($h, '[FLOG - '.date("D M d, Y G:i:s").']: '.$message."\n");
+		fflush($h);
+		fclose($h);
+	}
+}
+
 @ini_set('display_errors', 'on');
 
 require_once __DIR__.'/../vendor/autoload.php';
@@ -24,7 +37,6 @@ $app->before(function (Request $request) {
 	$data = json_decode($request->getContent(), true);
     $request->request->replace(is_array($data) ? $data : array());
 });
-
 $app->after(function (Request $request, Response $response) {
 	if ($jsonp_callback = $request->get('jsonp_callback'))
 	{
@@ -33,9 +45,14 @@ $app->after(function (Request $request, Response $response) {
 	else
 	{
 		$response->headers->set('Access-Control-Allow-Origin', '*');
+		$response->headers->set('Access-Control-Allow-Headers', 'Content-Type');
 	}
-
 });
+
+// We need to reply to OPTIONS too, for CORS.
+$app->match('{url}', function ($url, Request $request) use ($app) {
+	return $app->json(array());
+})->assert('url', '.+')->method('OPTIONS');
 
 /* Define Routes */
 
@@ -76,7 +93,11 @@ $app->get('/newsletters/{newsletter_id}', function($newsletter_id) use ($app) {
 
 // Create newsletter
 $app->post('/newsletters', function(Request $request) use ($app) {
-	return $app->ifSaved(new PS\Model\Newsletter($request->request->all()));
+	$params = $request->request->all();
+	$params['number'] = PS\Model\Newsletter::max('number') + 1;
+	$nl = new PS\Model\Newsletter($params);
+
+	return $app->ifSaved($nl);
 });
 
 // Update newsletter

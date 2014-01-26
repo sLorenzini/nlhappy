@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS `Newsletter` ;
 CREATE  TABLE IF NOT EXISTS `Newsletter` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `number` INT NOT NULL ,
-  `date` DATETIME NULL ,
+  `date` DATE NULL ,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `number_UNIQUE` (`number` ASC) )
 ENGINE = InnoDB;
@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS `Language` ;
 CREATE  TABLE IF NOT EXISTS `Language` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `code` VARCHAR(45) NOT NULL ,
+  `name` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `code_UNIQUE` (`code` ASC) )
 ENGINE = InnoDB;
@@ -105,3 +106,16 @@ CREATE  TABLE IF NOT EXISTS `ArticleButton` (
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+-- FIXTURES --
+
+INSERT INTO Language (`code`, `name`)
+VALUES
+('en', 'English'),
+('fr', 'French'),
+('de', 'German'),
+('pl', 'Polish'),
+('ru', 'Russian'),
+('it', 'Italian'),
+('es', 'Spanish'),
+('br', 'Brazilian')
