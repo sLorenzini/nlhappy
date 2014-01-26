@@ -88,7 +88,8 @@ $app->get('/newsletters', function() use ($app) {
 
 // Get newsletters
 $app->get('/newsletters/{newsletter_id}', function($newsletter_id) use ($app) {
-	return $app->models(PS\Model\Newsletter::with('languages')->find($newsletter_id));
+	$nl = PS\Model\Newsletter::with('languages')->find($newsletter_id);
+	return $app->models($nl);
 });
 
 // Create newsletter
@@ -163,7 +164,13 @@ $app->post('/newsletters/{newsletter_id}/{language_code}/articles', function(Req
 	$newsletterLanguage = $app->getNewsletterLanguage($newsletter_id, $language_code);
 	if ($newsletterLanguage)
 	{
-		$article = new PS\Model\NewsletterArticle($request->request->all());
+		$params = $request->request->all();
+
+		$params['type'] = 'default';
+		$params['position'] = PS\Model\NewsletterArticle::where('type', $params['type'])->max('position') + 1;
+
+		$article = new PS\Model\NewsletterArticle($params);
+
 		$article->newsletterLanguage()->associate($newsletterLanguage);
 		return $app->ifSaved($article);
 	}
