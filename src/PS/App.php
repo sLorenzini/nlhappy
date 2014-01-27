@@ -18,7 +18,16 @@ class App extends \Silex\Application
 	{
 		if ($data)
 		{
-			return $this->yay($data->toArray());
+			if (is_array($data))
+			{
+				return $this->yay(array_map(function($model) {
+					return $model->toArray();
+				}, $data));
+			}
+			else
+			{
+				return $this->yay($data->toArray());
+			}
 		}
 		else
 		{

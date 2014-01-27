@@ -198,6 +198,49 @@ $app->post('/articles/{article_id}', function(Request $request, $article_id) use
 	}
 });
 
+// Move Article
+$app->post('/articles/{article_id}/move', function(Request $request, $article_id) use ($app, $capsule) {
+	if ($article = PS\Model\NewsletterArticle::find($article_id))
+	{
+		$delta = $request->request->get('delta', -1);
+		$articles = $article->newsletterLanguage->articles()
+		->where('type', $article->type)
+		->orderBy('position', 'asc')
+		->get();
+
+		$move = array();
+
+		foreach ($articles as $n => $toMove)
+		{
+			if ($toMove->id === $article->id && isset($articles[$n+$delta]))
+			{
+				$move[0] = array('id' => $articles[$n+$delta]->id, 'position' => $toMove->position);
+				$move[1] = array('id' => $article->id, 'position' => $articles[$n+$delta]->position);
+				break;
+			}			
+		}
+
+		if (count($move) === 2)
+		{
+			$conn = $capsule->getConnection();
+			$conn->transaction(function () use ($move, $conn) {
+				$safePos = PS\Model\NewsletterArticle::max('position') + 1;
+				$conn->update('UPDATE NewsletterArticle SET position=? WHERE id=?', array($safePos, $move[1]['id']));
+				$conn->update('UPDATE NewsletterArticle SET position=? WHERE id=?', array($move[0]['position'], $move[0]['id']));
+				$conn->update('UPDATE NewsletterArticle SET position=? WHERE id=?', array($move[1]['position'], $move[1]['id']));
+			});
+		}
+
+		flog(print_r($move, 1));
+
+		return $app->yay($move);
+	}
+	else
+	{
+		return $app->oops('Could not find article.');
+	}
+});
+
 // List Articles
 $app->get('/newsletters/{newsletter_id}/{language_code}/articles', function($newsletter_id, $language_code) use ($app) {
 	$newsletterLanguage = $app->getNewsletterLanguage($newsletter_id, $language_code);
@@ -222,9 +265,23 @@ $app->post('/articles/{article_id}/delete', function(Request $request, $article_
 $app->post('/articles/{article_id}/buttons', function(Request $request, $article_id) use ($app) {
 	if ($article = PS\Model\NewsletterArticle::find($article_id))
 	{
-		$button = new PS\Model\ArticleButton($request->request->all());
+		$params = $request->request->all();
+		$params['position'] = PS\Model\ArticleButton::where('newsletter_article_id', $article_id)->max('position') + 1;
+		$button = new PS\Model\ArticleButton($params);
 		$button->article()->associate($article);
 		return $app->ifSaved($button);
+	}
+	else
+	{
+		return $app->oops('Could not find article.');
+	}
+});
+
+// List Article Buttons
+$app->get('/articles/{article_id}/buttons', function(Request $request, $article_id) use ($app) {
+	if ($article = PS\Model\NewsletterArticle::find($article_id))
+	{
+		return $app->models($article->buttons);
 	}
 	else
 	{
