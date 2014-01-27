@@ -307,5 +307,47 @@ $app->post('/buttons/{button_id}/delete', function(Request $request, $button_id)
 	return $app->ifDeleted(PS\Model\ArticleButton::find($button_id));
 });
 
+// Move Button
+$app->post('/buttons/{button_id}/move', function(Request $request, $button_id) use ($app, $capsule) {
+	if ($button = PS\Model\ArticleButton::find($button_id))
+	{
+		$delta = $request->request->get('delta', -1);
+		$buttons = $button->article->buttons()
+		->orderBy('position', 'asc')
+		->get();
+
+		$move = array();
+
+		foreach ($buttons as $n => $toMove)
+		{
+			if ($toMove->id === $button->id && isset($buttons[$n+$delta]))
+			{
+				$move[0] = array('id' => $buttons[$n+$delta]->id, 'position' => $toMove->position);
+				$move[1] = array('id' => $button->id, 'position' => $buttons[$n+$delta]->position);
+				break;
+			}			
+		}
+
+		if (count($move) === 2)
+		{
+			$conn = $capsule->getConnection();
+			$conn->transaction(function () use ($move, $conn) {
+				$safePos = PS\Model\ArticleButton::max('position') + 1;
+				$conn->update('UPDATE ArticleButton SET position=? WHERE id=?', array($safePos, $move[1]['id']));
+				$conn->update('UPDATE ArticleButton SET position=? WHERE id=?', array($move[0]['position'], $move[0]['id']));
+				$conn->update('UPDATE ArticleButton SET position=? WHERE id=?', array($move[1]['position'], $move[1]['id']));
+			});
+		}
+
+		flog(print_r($move, 1));
+
+		return $app->yay($move);
+	}
+	else
+	{
+		return $app->oops('Could not find button.');
+	}
+});
+
 /* Rock On! */
 $app->run();
