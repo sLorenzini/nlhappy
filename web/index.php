@@ -189,7 +189,28 @@ $app->get('/articles/{article_id}', function ($article_id) use ($app) {
 $app->post('/articles/{article_id}', function(Request $request, $article_id) use ($app) {
 	if ($article = PS\Model\NewsletterArticle::find($article_id))
 	{
-		$article->fill($request->request->all());
+		$params = $request->request->all();
+
+		// Make sure we set a valid position if changing the article type
+		if (array_key_exists('type', $params))
+		{
+			if ($params['type'] != $article['type'])
+			{
+				$taken = $article->newsletterLanguage->articles()
+				->where('type', $params['type'])
+				->where('position', $article->position)->get();
+
+				if (count($taken) > 0)
+				{
+					$position = $article->newsletterLanguage->articles()
+					->where('type', $params['type'])
+					->max('position') + 1;
+
+					$params['position'] = $position;
+				}
+			}
+		}
+		$article->fill($params);
 		return $app->ifSaved($article);
 	}
 	else
