@@ -33,6 +33,10 @@ $capsule->bootEloquent();
 $app = new PS\App();
 $app['debug'] = true;
 
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__.'/views',
+));
+
 $app->before(function (Request $request) {
 	$data = json_decode($request->getContent(), true);
     $request->request->replace(is_array($data) ? $data : array());
@@ -150,6 +154,29 @@ $app->post('/newsletters/{newsletter_id}/{language_code}', function(Request $req
 // Get NewsletterLanguage
 $app->get('/newsletters/{newsletter_id}/{language_code}', function($newsletter_id, $language_code) use ($app) {
 	return $app->models($app->getNewsletterLanguage($newsletter_id, $language_code, true));
+});
+
+// Render NewsletterLanguage
+$app->get('/newsletters/{newsletter_id}/{language_code}/render', function($newsletter_id, $language_code) use ($app) {
+	$nl = $app->getNewsletterLanguage($newsletter_id, $language_code, true)->toArray();
+
+	$nl['default_articles'] = array();
+	$nl['footer_articles'] = array();
+
+	foreach ($nl['articles'] as $article)
+	{
+		if ($article['type'] === 'footer')
+			$nl['footer_articles'][] = $article;
+		else
+			$nl['default_articles'][] = $article;
+	}
+
+	foreach (array('default_articles', 'footer_articles') as $key)
+		usort($nl[$key], function($a, $b){
+			return (int)$a['position'] - (int)$b['position'];
+		});
+
+	return $app['twig']->render('newsletter.html.twig', array('nl' => $nl));
 });
 
 // Delete NewsletterLanguage

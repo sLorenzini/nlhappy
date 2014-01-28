@@ -82,7 +82,7 @@ class App extends \Silex\Application
 		}
 		else
 		{
-			return \PS\Model\NewsletterLanguage::with('newsletter', 'articles', 'articles.buttons')
+			return \PS\Model\NewsletterLanguage::with('newsletter', 'articles', 'articles.buttons', 'language')
 			->whereHas('language', function($q) use ($newsletter_id, $language_code) {
 				$q->where('code', $language_code);
 			})->where('newsletter_id', $newsletter_id)->first();
