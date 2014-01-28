@@ -72,10 +72,20 @@ class App extends \Silex\Application
 		}
 	}
 
-	public function getNewsletterLanguage($newsletter_id, $language_code)
+	public function getNewsletterLanguage($newsletter_id, $language_code, $full=false)
 	{
-		return \PS\Model\NewsletterLanguage::whereHas('language', function($q) use ($newsletter_id, $language_code) {
-			$q->where('code', $language_code);
-		})->where('newsletter_id', $newsletter_id)->first();
+		if (!$full)
+		{
+			return \PS\Model\NewsletterLanguage::whereHas('language', function($q) use ($newsletter_id, $language_code) {
+				$q->where('code', $language_code);
+			})->where('newsletter_id', $newsletter_id)->first();
+		}
+		else
+		{
+			return \PS\Model\NewsletterLanguage::with('newsletter', 'articles', 'articles.buttons')
+			->whereHas('language', function($q) use ($newsletter_id, $language_code) {
+				$q->where('code', $language_code);
+			})->where('newsletter_id', $newsletter_id)->first();
+		}
 	}
 }

@@ -149,7 +149,7 @@ $app->post('/newsletters/{newsletter_id}/{language_code}', function(Request $req
 
 // Get NewsletterLanguage
 $app->get('/newsletters/{newsletter_id}/{language_code}', function($newsletter_id, $language_code) use ($app) {
-	return $app->models($app->getNewsletterLanguage($newsletter_id, $language_code));
+	return $app->models($app->getNewsletterLanguage($newsletter_id, $language_code, true));
 });
 
 // Delete NewsletterLanguage
