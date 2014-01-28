@@ -166,7 +166,9 @@ $app->post('/newsletters/{newsletter_id}/{language_code}/articles', function(Req
 	{
 		$params = $request->request->all();
 
-		$params['type'] = 'default';
+		if (!isset($params['type']) || !$params['type'])
+			$params['type'] = 'default';
+
 		$params['position'] = PS\Model\NewsletterArticle::where('type', $params['type'])->max('position') + 1;
 
 		$article = new PS\Model\NewsletterArticle($params);
