@@ -1,0 +1,33 @@
+<table class="wtablecontent" width="660" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2f2f3">
+	<tr>
+		<td class="w20" width="660">
+			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="10" class="w660imgempty" width="660" border="0" style="display:block;overflow:hidden"/> 
+		</td>
+	</tr>
+	<tr>
+		<td class="w660vig" width="660">
+			<table class="w660vig"  width="660" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td class="w20" width="660" colspan="5">
+						<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/border_top_shop.png" alt="PS" height="7" class="w660imgempty" width="660" border="0" style="display:block;overflow:hidden"/> 
+					</td>
+				</tr>
+				<tr>
+					{% for i, article in nl.footer_articles %}
+						{% include 'footer-article.html' %}
+					{% endfor %}
+				</tr>
+				<tr>
+					<td class="w20" width="660" colspan="5">
+						<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/border_bottom_shop.png" alt="PS" height="7" class="w660imgempty" width="660" border="0" style="display:block;overflow:hidden"/> 
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="w20" width="660">
+			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="10" width="660" class="w660imgempty" border="0" style="display:block;overflow:hidden"/> 
+		</td>
+	</tr>						
+</table>

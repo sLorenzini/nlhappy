@@ -1,0 +1,29 @@
+<table class="wtablecontent" width="660" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2f2f3">
+	<tr>
+		<td class="w20" width="660" colspan="3">
+			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/top_content.png" alt="edito" height="6" class="w660imgempty" width="660" border="0" style="display:block;overflow:hidden"> 
+		</td>
+	</tr>
+	<tr>
+		<td class="wleftrightcontent" width="20" style="border-left:1px solid #e7e7e8" bgcolor="#ffffff">
+			&nbsp;
+		</td>
+		<td class="wtablecontent" width="620" bgcolor="#ffffff">
+			<img class="w400" src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="15" width="620" border="0" style="display:block;overflow:hidden">
+			
+			{% for i, article in nl.default_articles %}
+				{% include 'main-article.html' %}
+			{% endfor %}
+			
+			<!--EOA-->			
+		</td>
+		<td class="wleftrightcontent" width="20" style="border-right:1px solid #e7e7e8" bgcolor="#ffffff">
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td class="w20" width="660" colspan="3">
+			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/bottom_content.png" alt="edito" height="6" width="660" class="w660imgempty" border="0" style="display:block;overflow:hidden"> 
+		</td>
+	</tr>
+</table>

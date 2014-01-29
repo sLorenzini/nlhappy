@@ -157,7 +157,7 @@ $app->get('/newsletters/{newsletter_id}/{language_code}', function($newsletter_i
 });
 
 // Render NewsletterLanguage
-$app->get('/newsletters/{newsletter_id}/{language_code}/render', function($newsletter_id, $language_code) use ($app) {
+$app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Request $request, $newsletter_id, $language_code) use ($app) {
 	$nl = $app->getNewsletterLanguage($newsletter_id, $language_code, true)->toArray();
 
 	$nl['default_articles'] = array();
@@ -176,9 +176,18 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function($newsl
 			return (int)$a['position'] - (int)$b['position'];
 		});
 
-	$cssin = new FM\CSSIN();
 
-	return $app['twig']->render('newsletter.html.twig', array('nl' => $nl));
+	$template = $request->query->get('template', 'newsletter');
+
+	$html = $app['twig']->render(basename($template).'.html.twig', array('nl' => $nl));
+
+	if ($request->query->get('inline') != '0')
+	{
+		$cssin = new FM\CSSIN();
+		$html = $cssin->inlineCSS(null, $html);
+	}
+
+	return $html;
 });
 
 // Delete NewsletterLanguage
