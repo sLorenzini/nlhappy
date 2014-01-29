@@ -176,6 +176,8 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function($newsl
 			return (int)$a['position'] - (int)$b['position'];
 		});
 
+	$cssin = new FM\CSSIN();
+
 	return $app['twig']->render('newsletter.html.twig', array('nl' => $nl));
 });
 
@@ -280,8 +282,6 @@ $app->post('/articles/{article_id}/move', function(Request $request, $article_id
 				$conn->update('UPDATE NewsletterArticle SET position=? WHERE id=?', array($move[1]['position'], $move[1]['id']));
 			});
 		}
-
-		flog(print_r($move, 1));
 
 		return $app->yay($move);
 	}
@@ -388,8 +388,6 @@ $app->post('/buttons/{button_id}/move', function(Request $request, $button_id) u
 				$conn->update('UPDATE ArticleButton SET position=? WHERE id=?', array($move[1]['position'], $move[1]['id']));
 			});
 		}
-
-		flog(print_r($move, 1));
 
 		return $app->yay($move);
 	}
