@@ -181,11 +181,12 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 
 	$html = $app['twig']->render(basename($template).'.html.twig', array('nl' => $nl));
 
+	/*
 	if ($request->query->get('inline') != '0')
 	{
 		$cssin = new FM\CSSIN();
 		$html = $cssin->inlineCSS(null, $html);
-	}
+	}*/
 
 	return $html;
 });

@@ -1,14 +1,31 @@
+<!doctype html>
 <html>
 	<head>
+		<meta charset="utf-8"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<title>Newsletter PrestaShop #{{nl.newsletter.number}} - {{nl.newsletter.date}}</title>
+		<link href="http://www.prestashop.com/images/favicon.ico" rel="shortcut icon">
 		{% include 'style.html' %}
 	</head>
-	<body>
-		{% include 'header-1.html' %}
-		{% include 'header-2.html' %}
-
+	<body marginheight="0" topmargin="0" marginwidth="0" leftmargin="0" bgcolor="#f2f2f3" style="-webkit-text-size-adjust:none;">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2f2f3">
+			<tr>
+				<td bgcolor="#262830" align="center" style="border-bottom:1px solid #000000;">
+				<!-- HEADER -->
+					<table class="w660" width="660" border="0" cellspacing="0" cellpadding="0" bgcolor="#262830">
+						<tr>
+							{% include 'header-1.html' %}
+							{% include 'header-2.html' %}
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<!-- CONTENT -->
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2f2f3">
 			<tr>
 				<td bgcolor="#f2f2f3" align="center">
+					<!-- EDITO / MENU -->
 					<table class="w660" width="660" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2f2f3">
 						<tr>
 							<td class="w660" width="660" colspan="3">
@@ -30,7 +47,7 @@
 										<td class="w20" width="13">
 											<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="20" width="13" border="0" style="display:block;overflow:hidden"/> 
 										</td>
-										<td class="wsummary" width="213" bgcolor="#ffffff" style="border-left:2px solid #e7e7e8;border-right:2px solid #e7e7e8" valign="top">
+										<td class="wsummary" width="213" bgcolor="#ffffff" style="border-left:2px solid #e7e7e8;border-right:2px solid #e7e7e8"  valign="top">
 											{% include 'right-summary.html' %}
 										</td>
 									</tr>
@@ -43,8 +60,31 @@
 							</td>
 						</tr>
 					</table>
-					<img class="wsummary" src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="12" width="660" border="0" style="display:block;overflow:hidden">
-					{% include 'main-articles.html' %}
+					<img class="wsummary" src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="12" width="660" border="0" style="display:block;overflow:hidden"/>
+					<!-- MAIN CONTENT -->
+					<table class="wtablecontent" width="660" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2f2f3">
+						<tr>
+							<td class="w20" width="660" colspan="3">
+								<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/top_content.png" alt="edito" height="6" class="w660imgempty" width="660" border="0" style="display:block;overflow:hidden"/> 
+							</td>
+						</tr>
+						<tr>
+							<td class="wleftrightcontent" width="20" style="border-left:1px solid #e7e7e8" bgcolor="#ffffff">
+								&nbsp;
+							</td>
+							<td class="wtablecontent" width="620" bgcolor="#ffffff">
+								{% include 'main-articles.html' %}
+							</td>
+							<td class="wleftrightcontent" width="20"style="border-right:1px solid #e7e7e8" bgcolor="#ffffff">
+								&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td class="w20" width="660" colspan="3">
+								<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/bottom_content.png" alt="edito" height="6" width="660" class="w660imgempty" border="0" style="display:block;overflow:hidden"/> 
+							</td>
+						</tr>
+					</table>
 					{% include 'footer-articles.html' %}
 				</td>
 			</tr>
