@@ -24,6 +24,7 @@ CREATE  TABLE IF NOT EXISTS `Language` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `code` VARCHAR(45) NOT NULL ,
   `name` VARCHAR(256) NOT NULL,
+  `position` INT NOT NULL,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `code_UNIQUE` (`code` ASC) )
 ENGINE = InnoDB;
@@ -109,13 +110,13 @@ ENGINE = InnoDB;
 
 -- FIXTURES --
 
-INSERT INTO Language (`code`, `name`)
+INSERT INTO Language (`code`, `name`, `position`)
 VALUES
-('en', 'English'),
-('fr', 'French'),
-('de', 'German'),
-('pl', 'Polish'),
-('ru', 'Russian'),
-('it', 'Italian'),
-('es', 'Spanish'),
-('br', 'Brazilian')
+('en', 'English', 1),
+('fr', 'French', 2),
+('de', 'German', 4),
+('pl', 'Polish', 7),
+('ru', 'Russian', 8),
+('it', 'Italian', 5),
+('es', 'Spanish', 3),
+('br', 'Brazilian', 6)
