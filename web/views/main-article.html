@@ -70,20 +70,24 @@
 						<td class="wbtnmore" width="10">
 							<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="15" width="10" border="0" style="display:block;overflow:hidden"/> 
 						</td>
-						<td class="btnbottommore" width="180">
-							<!--[if mso]>
-								<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{button.url}}" style="height:37px;v-text-anchor:middle;width:180px;" arcsize="14%" stroke="f" fillcolor="{{button.style}}">
-							    	<w:anchorlock/>
-							    		<center>
-							  <![endif]-->
-							 	<a class="btnbottommore_big" href="{{button.url}}" style="background-color:{{button.style}};border-radius:5px;color:#ffffff;display:inline-block;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;line-height:37px;text-align:center;text-decoration:none;width:180px;-webkit-text-size-adjust:none;">
-							 		{{button.title}}
-							 	</a>
-							  <!--[if mso]>
-							    		</center>
-							  		</v:roundrect>
-							<![endif]-->
-						</td>
+						{% if button.addons|default(false) %}
+							<td>NIY</td>
+						{% else %}
+							<td class="btnbottommore" width="180">
+								<!--[if mso]>
+									<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{button.url}}" style="height:37px;v-text-anchor:middle;width:180px;" arcsize="14%" stroke="f" fillcolor="{{button.style}}">
+								    	<w:anchorlock/>
+								    		<center>
+								  <![endif]-->
+								 	<a class="btnbottommore_big" href="{{button.url}}" style="background-color:{{button.style}};border-radius:5px;color:#ffffff;display:inline-block;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;line-height:37px;text-align:center;text-decoration:none;width:180px;-webkit-text-size-adjust:none;">
+								 		{{button.title}}
+								 	</a>
+								  <!--[if mso]>
+								    		</center>
+								  		</v:roundrect>
+								<![endif]-->
+							</td>
+						{% endif %}
 						<td class="w10" width="10">
 							<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="15" width="10" border="0" style="display:block;overflow:hidden"/> 
 						</td>

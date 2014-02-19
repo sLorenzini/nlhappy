@@ -9,7 +9,11 @@ class ArticleButton extends \Illuminate\Database\Eloquent\Model
 		'url',
 		'title',
 		'style',
-		'position'
+		'position',
+		'width',
+		'height',
+		'line_height',
+		'addons'
 	);
 	public $timestamps = false;
 
