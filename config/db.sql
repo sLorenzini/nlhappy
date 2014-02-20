@@ -126,12 +126,17 @@ CREATE TABLE IF NOT EXISTS `MessageTranslation` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `message_id` INT NOT NULL ,
   `language_id` INT NOT NULL ,
-  `message` TEXT NOT NULL ,
+  `translation` TEXT NOT NULL ,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `Message_message_language` (`message_id`, `language_id`) ,
   CONSTRAINT `fk_MessageTranslation_Language`
     FOREIGN KEY (`language_id` )
     REFERENCES `Language` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_MessageTranslation_Message`
+    FOREIGN KEY (`message_id` )
+    REFERENCES `Message` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION
 )
