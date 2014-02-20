@@ -1,65 +1,17 @@
-<table class="w140" width="140" border="0" cellspacing="0" cellpadding="0" >
+<table class="w140" width="140" border="0" cellspacing="0" cellpadding="0">
 	<tr>
-		<td class="w30" width="15">
-			<a style="text-decoration:none;" title="Anglais" href="http://newsletter.prestashop.com/newsletters/{{nl.newsletter.number}}/newsmail_en.html"> 
-				<img align="right"  src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/flag/en.png" alt="Anglais" border="0" height="13" width="14" />
-			</a>
-		</td>
-		<td class="w20header" width="7">
-			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="25" width="7" border="0" style="overflow:hidden"/> 
-		</td>
-		<td class="w30" width="15">
-			<a style="text-decoration:none;display:block" title="Fran&ccedil;ais" href="http://newsletter.prestashop.com/newsletters/{{nl.newsletter.number}}/newsmail_fr.html">
-				<img align="right" src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/flag/fr.png" alt="Fran&ccedil;ais" border="0" height="13" width="14" /> 
-			</a>
-		</td>
-		<td class="w20header" width="7">
-			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="25" width="7" border="0" style="overflow:hidden"/> 
-		</td>
-		<td class="w30" width="15">
-			<a style="text-decoration:none;" title="Espagne" href="http://newsletter.prestashop.com/newsletters/{{nl.newsletter.number}}/newsmail_es.html">
-				<img align="right"  src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/flag/es.png" alt="Espagne" border="0" height="13" width="14" /> 
-			</a> 
-		</td>
-		<td class="w20header" width="7">
-			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="25" width="7" border="0" style="overflow:hidden"/> 
-		</td>
-		<td class="w30" width="15">
-			<a style="text-decoration:none;" title="Allemand" href="http://newsletter.prestashop.com/newsletters/{{nl.newsletter.number}}/newsmail_de.html"> 
-				<img align="right"  src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/flag/de.png" alt="Allemand" border="0" height="13" width="14" /> 
-			</a> 
-		</td>
-		<td class="w20header" width="7">
-			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="25" width="7" border="0" style="overflow:hidden"/> 
-		</td>
-		<td class="w30" width="15">
-			<a style="text-decoration:none;" title="Italien"  href="http://newsletter.prestashop.com/newsletters/{{nl.newsletter.number}}/newsmail_it.html"> 
-				<img align="right"  src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/flag/it.png" alt="Italien" border="0" height="13" width="14" /> 
-			</a>
-		</td>
-		<td class="w20header" width="7">
-			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="25" width="7" border="0" style="overflow:hidden"/> 
-		</td>
-		<td class="w30" width="15">
-			<a style="text-decoration:none;" title="Portugais"  href="http://newsletter.prestashop.com/newsletters/{{nl.newsletter.number}}/newsmail_pt.html"> 
-				<img align="right"  src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/flag/pt.png" alt="Portugais" border="0" height="13" width="14" /> 
-			</a>
-		</td>
-		<td class="w20header" width="7">
-			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="25" width="7" border="0" style="overflow:hidden"/> 
-		</td>
-		<td class="w30" width="15">
-			<a style="text-decoration:none;" title="Russe"  href="http://newsletter.prestashop.com/newsletters/{{nl.newsletter.number}}/newsmail_ru.html"> 
-				<img align="right"  src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/flag/ru.png" alt="Russe" border="0" height="13" width="14" /> 
-			</a>
-		</td>
-		<td class="w20header" width="7">
-			<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="25" width="7" border="0" style="overflow:hidden"/> 
-		</td>
-		<td class="w30" width="15">
-			<a style="text-decoration:none;" title="Polonais"  href="http://newsletter.prestashop.com/newsletters/{{nl.newsletter.number}}/newsmail_pl.html"> 
-				<img align="right"  src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/flag/pl.png" alt="Polonais" border="0" height="13" width="14" /> 
-			</a>
-		</td>
+		{% for i, language in languages %}
+			{% if i > 0 %}
+				<td class="w20header" width="7">
+					<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="25" width="7" border="0" style="overflow:hidden"/> 
+				</td>
+			{% endif %}
+
+			<td class="w30" width="15">
+				<a style="text-decoration:none;" title="{{language.name}}" href="http://newsletter.prestashop.com/newsletters/{{nl.newsletter.number}}/newsmail_{{language.img_code}}.html">
+					<img align="right"  src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/flag/{{language.img_code}}.png" alt="Espagne" border="0" height="13" width="14" /> 
+				</a> 
+			</td>
+		{% endfor %}
 	</tr>
 </table>

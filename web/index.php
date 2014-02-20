@@ -192,8 +192,25 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 		$messages[$message['message']['mkey']] = $message['translation'];
 	}
 
+	$raw_languages = PS\Model\NewsletterLanguage::with('language')
+	->where('newsletter_id', $newsletter_id)
+	->get()
+	->toArray();
 
-	$html = $app['twig']->render(basename($template).'.html.twig', array('nl' => $nl, 'messages' => $messages));
+	$languages = [];
+
+	foreach ($raw_languages as $language)
+	{
+		$l = $language['language'];
+		$l['img_code'] = $l['code'] === 'br' ? 'pt' : $l['code'];
+		$languages[] = $l;
+	}
+
+	usort($languages, function($a, $b){
+		return $a['position'] - $b['position'];
+	});
+
+	$html = $app['twig']->render(basename($template).'.html.twig', array('nl' => $nl, 'messages' => $messages, 'languages' => $languages));
 
 	/*
 	if ($request->query->get('inline') != '0')
