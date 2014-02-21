@@ -97,7 +97,11 @@ CREATE  TABLE IF NOT EXISTS `ArticleButton` (
   `title` VARCHAR(64) NULL ,
   `style` VARCHAR(45) NULL ,
   `position` INT NOT NULL ,
-  `url` VARCHAR(256) NULL ,
+  `url` VARCHAR(256) NOT NULL ,
+  `width` INT UNSIGNED NOT NULL,
+  `height` INT UNSIGNED NOT NULL,
+  `line_height` INT UNSIGNED NOT NULL,
+  `addons` BOOLEAN NOT NULL,
   PRIMARY KEY (`id`) ,
   INDEX `fk_ArticleButton_1_idx` (`newsletter_article_id` ASC) ,
   UNIQUE INDEX `index3` (`newsletter_article_id` ASC, `position` ASC) ,
@@ -106,6 +110,36 @@ CREATE  TABLE IF NOT EXISTS `ArticleButton` (
     REFERENCES `NewsletterArticle` (`id` )
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `Message`;
+
+CREATE TABLE IF NOT EXISTS `Message` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `mkey` VARCHAR(256) NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `Message_mkey` (`mkey`)
+)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `MessageTranslation` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `message_id` INT NOT NULL ,
+  `language_id` INT NOT NULL ,
+  `translation` TEXT NOT NULL ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `Message_message_language` (`message_id`, `language_id`) ,
+  CONSTRAINT `fk_MessageTranslation_Language`
+    FOREIGN KEY (`language_id` )
+    REFERENCES `Language` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_MessageTranslation_Message`
+    FOREIGN KEY (`message_id` )
+    REFERENCES `Message` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+)
 ENGINE = InnoDB;
 
 -- FIXTURES --

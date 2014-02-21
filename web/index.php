@@ -64,7 +64,7 @@ $app->match('{url}', function ($url, Request $request) use ($app) {
 
 // List languages
 $app->get('/languages', function() use ($app) {
-	return $app->models(PS\Model\Language::all());
+	return $app->models(PS\Model\Language::orderBy('position')->get());
 });
 
 // Create language
@@ -179,7 +179,38 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 
 	$template = $request->query->get('template', 'newsletter');
 
-	$html = $app['twig']->render(basename($template).'.html.twig', array('nl' => $nl));
+	$raw_messages = PS\Model\MessageTranslation::with('message')
+	->whereHas('language', function($q) use ($language_code){
+		$q->where('code', $language_code);
+	})->get()->toArray();
+
+	$messages = [];
+
+
+	foreach ($raw_messages as $message)
+	{
+		$messages[$message['message']['mkey']] = $message['translation'];
+	}
+
+	$raw_languages = PS\Model\NewsletterLanguage::with('language')
+	->where('newsletter_id', $newsletter_id)
+	->get()
+	->toArray();
+
+	$languages = [];
+
+	foreach ($raw_languages as $language)
+	{
+		$l = $language['language'];
+		$l['img_code'] = $l['code'] === 'br' ? 'pt' : $l['code'];
+		$languages[] = $l;
+	}
+
+	usort($languages, function($a, $b){
+		return $a['position'] - $b['position'];
+	});
+
+	$html = $app['twig']->render(basename($template).'.html.twig', array('nl' => $nl, 'messages' => $messages, 'languages' => $languages));
 
 	/*
 	if ($request->query->get('inline') != '0')
@@ -404,6 +435,48 @@ $app->post('/buttons/{button_id}/move', function(Request $request, $button_id) u
 	else
 	{
 		return $app->oops('Could not find button.');
+	}
+});
+
+// Messages
+$app->post('/messages', function(Request $request) use ($app){
+	$message = new PS\Model\Message($request->request->all());
+	return $app->ifSaved($message);
+});
+
+$app->get('/messages', function() use ($app){
+	return $app->models(PS\Model\Message::all());
+});
+
+$app->get('/messages/{message_id}/translations', function($message_id) use ($app){
+	return $app->models(PS\Model\MessageTranslation::with('language')->where('message_id', $message_id)->get());
+});
+
+$app->post('/messages/{message_id}/delete', function(Request $request, $message_id) use ($app){
+	return $app->ifDeleted(PS\Model\Message::find($message_id));
+});
+
+$app->post('/messages/{message_id}/{language_code}', function(Request $request, $message_id, $language_code) use ($app){
+	if ($language = PS\Model\Language::where('code', $language_code)->first())
+	{
+		$messageTranslation = PS\Model\MessageTranslation::where('message_id', $message_id)
+		->where('language_id', $language->id)->first();
+
+		if (!$messageTranslation)
+		{
+			$messageTranslation = new PS\Model\MessageTranslation();
+			$messageTranslation->language()->associate($language);
+
+			$message = PS\Model\Message::find($message_id);
+			$messageTranslation->message()->associate($message);
+		}
+
+		$messageTranslation->fill($request->request->all());
+		return $app->ifSaved($messageTranslation);
+	}
+	else
+	{
+		return $app->oops('Could not find language.');
 	}
 });
 
