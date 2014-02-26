@@ -71,15 +71,29 @@
 							<img src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/p.png" alt="PS" height="15" width="10" border="0" style="display:block;overflow:hidden"/> 
 						</td>
 						{% if button.addons|default(false) %}
-							<td>NIY</td>
+							<td class="btnbottommore" height="47" width="180" background="http://newsletter.prestashop.com/newsletters/newsletterV5/img/logo_ps_addons.png">
+								<!--[if mso]>
+									<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{button.url}}" style="height:50px;v-text-anchor:middle;width:180px;" arcsize="8%" stroke="f" fill="t">
+								    <v:fill type="tile" src="http://newsletter.prestashop.com/newsletters/newsletterV5/img/logo_ps_addons.png" color="#34383e" />
+								    <w:anchorlock/>
+								    <center style="color:#ffffff;font-family:Helvetica,sans-serif;font-size:10px;font-weight:bold;text-align:right;height: 47px;padding: 3px 5px 0 0;">
+								    <span style="font-size:12px">{{messages['addons_button']}}</span><br/>
+									<i><span style="font-size:23px">Addons</span></i></center>
+								  </v:roundrect>
+								<![endif]-->
+								<a href="{{button.url}}" class="btnmoreaddons" target="_blank" style="background-image:url(http://newsletter.prestashop.com/newsletters/newsletterV5/img/logo_ps_addons.png);background-repeat:no-repeat;border-radius:4px;color:#ffffff;display:inline-block;font-family:Helvetica,sans-serif;font-size:10px;font-weight:bold;text-align:right;text-decoration:none;width:176px;-webkit-text-size-adjust:none;mso-hide:all;height: 47px;padding: 3px 5px 0 0;">
+									<span style="font-size:12px">{{messages['addons_button']}}</span><br/>
+									<i><span style="font-size:23px">Addons</span></i>
+								</a>
+							</td>
 						{% else %}
 							<td class="btnbottommore" width="180">
 								<!--[if mso]>
-									<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{button.url}}" style="height:37px;v-text-anchor:middle;width:180px;" arcsize="14%" stroke="f" fillcolor="{{button.style}}">
+									<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{button.url}}" style="height:{{button.height}}px;v-text-anchor:middle;width:180px;" arcsize="14%" stroke="f" fillcolor="{{button.style}}">
 								    	<w:anchorlock/>
 								    		<center>
 								  <![endif]-->
-								 	<a class="btnbottommore_big" href="{{button.url}}" style="background-color:{{button.style}};border-radius:5px;color:#ffffff;display:inline-block;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;line-height:37px;text-align:center;text-decoration:none;width:180px;-webkit-text-size-adjust:none;">
+								 	<a class="btnbottommore_big" href="{{button.url}}" target="_blank" style="background-color:{{button.style}};border-radius:5px;color:#ffffff;display:inline-block;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;line-height:{{button.line_height}}px;text-align:center;text-decoration:none;width:180px;-webkit-text-size-adjust:none;">
 								 		{{button.title}}
 								 	</a>
 								  <!--[if mso]>

@@ -27,7 +27,7 @@
 									<td class="w660global_vig" width="148" align="left">
 										<font size="3" face="Arial" color="#d7006d">
 											<span class="spanvignettetitle" style="font-size:23px;display:block;width: 150px;">
-												{{article.title}}
+												{{article.title|raw}}
 											</span>
 										</font>
 									</td>
@@ -69,11 +69,11 @@
 									{% for button in article.buttons %}
 										<td class="w460" width="168" colspan="2" align="center">
 											<!--[if mso]>
-												<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{button.url}}" style="height:30px;v-text-anchor:middle;width:125px;" arcsize="14%" stroke="f" fillcolor="{{button.style}}">
+												<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{button.url}}" style="height:30px;v-text-anchor:middle;width:{{button.width}}px;" arcsize="14%" stroke="f" fillcolor="{{button.style}}">
 											  		<w:anchorlock/>
 											    		<center>
 											<![endif]-->
-												<a href="{{button.url}}" style="background-color:{{button.style}};border-radius:5px;color:#ffffff;display:inline-block;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;line-height:30px;text-align:center;text-decoration:none;width:125px;-webkit-text-size-adjust:none;">
+												<a href="{{button.url}}" style="background-color:{{button.style}};border-radius:5px;color:#ffffff;display:inline-block;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;line-height:30px;text-align:center;text-decoration:none;width:{{button.width}}px;-webkit-text-size-adjust:none;">
 													{{button.title}}
 												</a>
 										  	<!--[if mso]>

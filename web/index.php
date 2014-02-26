@@ -184,7 +184,7 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 		$q->where('code', $language_code);
 	})->get()->toArray();
 
-	$messages = [];
+	$messages = array();
 
 
 	foreach ($raw_messages as $message)
@@ -197,7 +197,7 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 	->get()
 	->toArray();
 
-	$languages = [];
+	$languages = array();
 
 	foreach ($raw_languages as $language)
 	{
