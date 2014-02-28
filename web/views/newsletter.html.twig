@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-		<title>Newsletter PrestaShop #{{nl.newsletter.number}} - {{nl.newsletter.date}}</title>
+		<title>{{messages['newsletter_number']|format(nl.newsletter.number)}} - {{nl.newsletter.date}}</title>
 		<link href="http://www.prestashop.com/images/favicon.ico" rel="shortcut icon">
 		{% include 'style.html' %}
 	</head>
