@@ -166,7 +166,10 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 	foreach ($nl['articles'] as $article)
 	{
 		if ($article['type'] === 'footer')
+		{
+			$article['default_color'] = $article['buttons'][0]['style'];
 			$nl['footer_articles'][] = $article;
+		}
 		else
 			$nl['default_articles'][] = $article;
 	}
