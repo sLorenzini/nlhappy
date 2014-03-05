@@ -222,6 +222,9 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 		$html = $cssin->inlineCSS(null, $html);
 	}*/
 
+	// Tricky thingy to htmlencode everything... except the HTML :)
+	$html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'UTF-8'), ENT_NOQUOTES);
+
 	return $html;
 });
 
