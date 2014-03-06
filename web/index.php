@@ -231,7 +231,17 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 	}*/
 
 	// Tricky thingy to htmlencode everything... except the HTML :)
-	$html = htmlspecialchars_decode(htmlentities($html, ENT_NOQUOTES, 'UTF-8'), ENT_NOQUOTES);
+	$list = get_html_translation_table(HTML_ENTITIES);
+	unset($list['"']);
+	unset($list['<']);
+	unset($list['>']);
+	unset($list['&']);
+
+	$search = array_keys($list);
+	$values = array_values($list);
+	//$search = array_map('utf8_encode', $search);
+
+	$html = str_replace($search, $values, $html);
 
 	return $html;
 });
