@@ -38,7 +38,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-    $twig->addFilter('localDate', new \Twig_Filter_Function(function($date, $locale, $format='medium'){
+    $twig->addFilter('localDate', new \Twig_Filter_Function(function($date, $locale, $format='long'){
     	return CLDR\I18n\DateFormatter::formatDate($date, $format, $locale);
     }));
 
