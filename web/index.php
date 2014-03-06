@@ -37,6 +37,14 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/views',
 ));
 
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+    $twig->addFilter('localDate', new \Twig_Filter_Function(function($date, $locale, $format='long'){
+    	return CLDR\I18n\DateFormatter::formatDate($date, $format, $locale);
+    }));
+
+    return $twig;
+}));
+
 $app->before(function (Request $request) {
 	$data = json_decode($request->getContent(), true);
     $request->request->replace(is_array($data) ? $data : array());
