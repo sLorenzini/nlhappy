@@ -1,6 +1,5 @@
 <?php
 
-
 function flog($message)
 {
 	static $path = '/tmp/flog.log';
@@ -239,7 +238,7 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 
 	$search = array_keys($list);
 	$values = array_values($list);
-	//$search = array_map('utf8_encode', $search);
+	$search = array_map('utf8_encode', $search);
 
 	$html = str_replace($search, $values, $html);
 
