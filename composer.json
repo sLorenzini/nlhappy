@@ -3,14 +3,19 @@
 	    {
 	        "type": "vcs",
 	        "url": "https://github.com/djfm/cssin"
-	    }
+	    },
+        {
+            "type": "vcs",
+            "url": "https://github.com/djfm/CLDR"
+        }
 	],
     "require": {
         "silex/silex": "~1.1",
         "twig/twig": ">=1.8,<2.0-dev",
         "symfony/twig-bridge": "~2.3",
         "illuminate/database": "*",
-        "djfm/cssin": "dev-master"
+        "djfm/cssin": "dev-master",
+        "djfm/CLDR": "dev-master"
     },
     "autoload": {
     	"psr-4": {"PS\\": "src/PS/"}
