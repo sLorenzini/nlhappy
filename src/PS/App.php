@@ -39,7 +39,8 @@ class App extends \Silex\Application
 	{
 		try {
 			$model->save();
-			return $this->models($model);
+
+			return $this->models($model->find($model->id));
 		}
 		catch (\Illuminate\Database\QueryException $e) {
 			return $this->oops($e->getMessage());

@@ -9,6 +9,7 @@ class NewsletterArticle extends \Illuminate\Database\Eloquent\Model
 		'type',
 		'title', 
 		'title_size',
+		'summary_height',
 		'position',
 		'body',
 		'image_url',
