@@ -1,1 +1,1 @@
-alter table `NewsletterArticle` add column summary_height INT NOT NULL default 150 after title_size;
+alter table `NewsletterArticle` add column summary_height INT NOT NULL default 15 after title_size;
