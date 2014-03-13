@@ -8,6 +8,19 @@
 		{% include 'style.html' %}
 	</head>
 	<body marginheight="0" topmargin="0" marginwidth="0" leftmargin="0" bgcolor="#f2f2f3" style="-webkit-text-size-adjust:none;">
+
+		{% if missing_messages|length > 0 %}
+			<div style="background-color:orange; padding:30px;">
+				<strong>Achtung!</strong> The following predefined messages have no translation!
+				<ul>
+					{% for message in missing_messages %}
+						<li>{{message}}</li>
+					{% endfor %}
+				</ul>
+				Use the Newsletter Interface ("Predefined Messages" menu) to add translations. You can add en ampty translation if a message is not needed in this language, but please write something.
+			</div>
+		{% endif %}
+
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#f2f2f3">
 			<tr>
 				<td bgcolor="#262830" align="center" style="border-bottom:1px solid #000000;">
