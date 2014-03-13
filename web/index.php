@@ -163,6 +163,41 @@ $app->get('/newsletters/{newsletter_id}/{language_code}', function($newsletter_i
 	return $app->models($app->getNewsletterLanguage($newsletter_id, $language_code, true));
 });
 
+function parseMessages($src)
+{
+	$messages_needed = array();
+	$exp = '/messages\[\'([^\']+)\'\]/';
+	$matches = array();
+	$n = preg_match_all($exp, $src, $matches);
+	
+	for ($i = 0; $i < $n; $i++)
+	{
+		$message_key = $matches[1][$i];
+		$messages_needed[] = $message_key;
+	}
+	return $messages_needed;
+}
+
+function getNeededMessages()
+{
+	$views_directory = dirname(__FILE__).'/views';
+
+	$messages_needed = array();
+
+	foreach (scandir($views_directory) as $file)
+	{
+		if (preg_match('/\.html$/', $file))
+		{
+			$path = "$views_directory/$file";
+			$src = file_get_contents($path);
+
+			$messages_needed = array_merge($messages_needed, parseMessages($src));		
+		}
+	}
+
+	return array_unique($messages_needed);
+}
+
 // Render NewsletterLanguage
 $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Request $request, $newsletter_id, $language_code) use ($app) {
 	$nl = $app->getNewsletterLanguage($newsletter_id, $language_code, true)->toArray();
@@ -202,6 +237,17 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 		$messages[$message['message']['mkey']] = $message['translation'];
 	}
 
+	$missing_messages = array();
+
+	foreach (getNeededMessages() as $mkey)
+	{
+		if (!isset($messages[$mkey]))
+		{
+			$missing_messages[] = $mkey;
+			$messages[$mkey] = '';
+		}
+	}
+
 	$raw_languages = PS\Model\NewsletterLanguage::with('language')
 	->where('newsletter_id', $newsletter_id)
 	->get()
@@ -220,7 +266,12 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 		return $a['position'] - $b['position'];
 	});
 
-	$html = $app['twig']->render(basename($template).'.html.twig', array('nl' => $nl, 'messages' => $messages, 'languages' => $languages));
+	$html = $app['twig']->render(basename($template).'.html.twig', array(
+		'nl' => $nl,
+		'messages' => $messages,
+		'missing_messages' => $missing_messages,
+		'languages' => $languages
+	));
 
 	/*
 	if ($request->query->get('inline') != '0')
@@ -473,6 +524,18 @@ $app->post('/messages', function(Request $request) use ($app){
 });
 
 $app->get('/messages', function() use ($app){
+
+	$messages_needed = getNeededMessages();
+
+	foreach ($messages_needed as $mkey) 
+	{
+		if (!PS\Model\Message::where('mkey', $mkey)->first())
+		{
+			$message = new PS\Model\Message(array('mkey' => $mkey));
+			$message->save();
+		}
+	}
+
 	return $app->models(PS\Model\Message::all());
 });
 
