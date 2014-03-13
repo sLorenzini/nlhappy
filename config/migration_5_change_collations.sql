@@ -1,5 +1,5 @@
 alter table ArticleButton convert to character set utf8 collate utf8_unicode_ci;
-alter table ArticleLanguage convert to character set utf8 collate utf8_unicode_ci;
+/*alter table ArticleLanguage convert to character set utf8 collate utf8_unicode_ci;*/
 alter table Language convert to character set utf8 collate utf8_unicode_ci;
 /* Diminish index size, in UTF8 256 becomes too long, damn!*/
 alter table Message drop index `Message_mkey`;

@@ -242,6 +242,11 @@ $app->get('/newsletters/{newsletter_id}/{language_code}/render', function(Reques
 
 	$html = str_replace($search, $values, $html);
 
+	// Encode polish chars
+	$polish_replacements = array('Ą' => '&#260;', 'ą' => '&#261;', 'Ę' => '&#280;', 'ę' => '&#281;', 'Ó' => '&#211;', 'ó' => '&#243;', 'Ć' => '&#262;', 'ć' => '&#263;', 'Ł' => '&#321;', 'ł' => '&#322;', 'Ń' => '&#323;', 'ń' => '&#324;', 'Ś' => '&#346;', 'ś' => '&#347;', 'Ź' => '&#377;', 'ź' => '&#378;', 'Ż' => '&#379;', 'ż' => '&#380;');
+
+	$html = str_replace(array_keys($polish_replacements), array_values($polish_replacements), $html);
+
 	return $html;
 });
 
